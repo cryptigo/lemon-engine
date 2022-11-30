@@ -1,8 +1,7 @@
 #type vertex
-#version 330 core
-layout(location=0) in vec3 aPos;
-layout(location=1) in vec4 aColor;
-
+#version 440 core
+layout (location=0) in vec3 aPos;
+layout (location=1) in vec4 aColor;
 
 uniform mat4 uProjection;
 uniform mat4 uView;
@@ -16,7 +15,7 @@ void main()
 }
 
 #type fragment
-#version 330 core
+#version 440 core
 
 in vec4 fColor;
 
