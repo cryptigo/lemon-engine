@@ -11,6 +11,7 @@ import org.lwjgl.BufferUtils;
 import org.joml.Vector2f;
 import renderer.Shader;
 import renderer.Texture;
+import util.AssetPool;
 import util.Time;
 
 import static org.lwjgl.opengl.GL30.*;
@@ -45,11 +46,16 @@ public class LevelEditorScene extends Scene {
                 this.addGameObjectToScene(go);
             }
         }
+        loadResources();
+    }
+
+    private void loadResources() {
+        AssetPool.getShader("assets/data/shaders/default.glsl");
     }
 
     @Override
     public void update(float dt) {
-        System.out.println("FPS: " + (1.0f / dt));
+
 
         for (GameObject go : this.gameObjects) {
             go.update(dt);

@@ -4,6 +4,7 @@ import components.SpriteRenderer;
 import lemon.Window;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL15C;
+import util.AssetPool;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
@@ -38,7 +39,7 @@ public class RenderBatch {
     private Shader shader;
 
     public RenderBatch(int maxBatchSize) {
-        shader = new Shader("assets/data/shaders/default.glsl");
+        shader = AssetPool.getShader("assets/data/shaders/default.glsl");
         shader.compile();
         this.sprites = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;
