@@ -11,24 +11,11 @@ import util.Settings;
 
 public class SpriteRenderer extends Component {
 
-    private Vector4f color;
-    private Sprite sprite;
+    private Vector4f color = Color.WHITE;
+    private Sprite sprite = new Sprite();
 
-    private Transform lastTransform;
-    private boolean isDirty = false;
-
-    public SpriteRenderer(Vector4f color) {
-        this.color = color;
-        this.sprite = new Sprite(null);
-        this.isDirty = true;
-    }
-
-    public SpriteRenderer(Sprite sprite) {
-        this.sprite = sprite;
-        this.color = Settings.SPRITE_RENDERER_DEFAULT_COLOR;
-        this.isDirty = true;
-    }
-
+    private transient Transform lastTransform;
+    private transient boolean isDirty = false;
 
     @Override
     public void start() {

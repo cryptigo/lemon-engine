@@ -13,8 +13,7 @@ public class Texture {
     private int texID;
     private int width, height;
 
-    // Creates a new Texture object from a filepath.
-    public Texture(String filepath) {
+    public void init(String filepath) {
         this.filepath = filepath;
 
         // Generate texture

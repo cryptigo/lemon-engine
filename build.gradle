@@ -46,6 +46,9 @@ dependencies {
     implementation "io.imgui.java:lwjgl3:$imguiVersion"
     runtimeOnly "io.imgui.java:natives-linux:$imguiVersion"
 
+    // LuaJ
+    implementation "org.luaj:luaj-jse:3.0.1"
+
 }
 
 test {
