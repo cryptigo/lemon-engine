@@ -10,6 +10,7 @@ import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
+import static util.Color.SOFT_RED;
 
 public class Window {
     private int width, height;
@@ -26,9 +27,9 @@ public class Window {
         this.width = 1920;
         this.height = 1080;
         this.title = "Lemon Engine";
-        r = 0;
-        g = 0;
-        b = 0;
+        r = 1;
+        g = 1;
+        b = 1;
         a = 1;
     }
 
@@ -116,6 +117,10 @@ public class Window {
 
         // Initialize OpenGL context
         GL.createCapabilities();
+
+        // Enable blending
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
         // Switch to the level editor scene
         Window.changeScene(0);
