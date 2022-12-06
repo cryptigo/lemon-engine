@@ -1,11 +1,13 @@
 package components;
 
+import imgui.ImGui;
 import lemon.Component;
 import lemon.Transform;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 import renderer.Texture;
 import util.Color;
+import util.Settings;
 
 public class SpriteRenderer extends Component {
 
@@ -23,7 +25,7 @@ public class SpriteRenderer extends Component {
 
     public SpriteRenderer(Sprite sprite) {
         this.sprite = sprite;
-        this.color = Color.WHITE;
+        this.color = Settings.SPRITE_RENDERER_DEFAULT_COLOR;
         this.isDirty = true;
     }
 
@@ -38,6 +40,15 @@ public class SpriteRenderer extends Component {
         if (!this.lastTransform.equals(this.gameObject.transform)) {
             this.gameObject.transform.copy(this.lastTransform);
             isDirty = true;
+        }
+    }
+
+    @Override
+    public void imgui() {
+        float[] imColor = {color.x, color.y, color.z, color.w};
+        if (ImGui.colorPicker4("Color Picker: ", imColor)) {
+            this.color.set(imColor[0], imColor[1], imColor[2], imColor[3]);
+            this.isDirty = true;
         }
     }
 
@@ -63,7 +74,6 @@ public class SpriteRenderer extends Component {
             this.isDirty = true;
             this.color.set(color);
         }
-
     }
 
     public boolean isDirty() {

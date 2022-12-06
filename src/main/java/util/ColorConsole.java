@@ -1,6 +1,14 @@
 package util;
 
 public class ColorConsole {
+    // LOGGER:
+    // -------
+    // DEBUG
+    // TRACE
+    // ERROR
+    // WARNING
+    // CRITICAL
+
     // Reset
     public static final String RESET = "\u001B[0m";
 

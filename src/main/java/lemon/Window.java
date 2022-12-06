@@ -4,6 +4,7 @@ import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 import util.ColorConsole;
+import util.Settings;
 import util.Time;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
@@ -16,6 +17,7 @@ public class Window {
     private int width, height;
     private String title;
     private long glfwWindow;
+    private ImGuiLayer imguiLayer;
 
     public float r, g, b, a;
     private boolean fadeToBlack = false;
@@ -24,13 +26,14 @@ public class Window {
     private static Scene currentScene;
 
     private Window() {
-        this.width = 1920;
-        this.height = 1080;
-        this.title = "Lemon Engine";
-        r = 1;
-        g = 1;
-        b = 1;
-        a = 1;
+        this.width = Settings.DEFAULT_WINDOW_WIDTH;
+        this.height = Settings.DEFAULT_WINDOW_HEIGHT;
+        this.title = Settings.DEFAULT_WINDOW_TITLE;
+        // TODO: Create a color class so I don't have to use coordinates.
+        r = Settings.DEFAULT_WINDOW_COLOR.x;
+        g = Settings.DEFAULT_WINDOW_COLOR.y;
+        b = Settings.DEFAULT_WINDOW_COLOR.z;
+        a = Settings.DEFAULT_WINDOW_COLOR.w;
     }
 
     public static void changeScene(int newScene) {
@@ -94,6 +97,7 @@ public class Window {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
 
+
         // Create the window
         glfwWindow = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
         if (glfwWindow == NULL) {
@@ -105,12 +109,17 @@ public class Window {
         glfwSetMouseButtonCallback(glfwWindow, MouseListener::mouseButtonCallback);
         glfwSetScrollCallback(glfwWindow, MouseListener::mouseScrollCallback);
         glfwSetKeyCallback(glfwWindow, KeyListener::keyCallback);
+        glfwSetWindowSizeCallback(glfwWindow, (w, newWidth, newHeight) -> {
+            Window.setWidth(newWidth);
+            Window.setHeight(newHeight);
+        });
 
         // Make the OpenGL context current
         glfwMakeContextCurrent(glfwWindow);
 
         // Enable VSync
-        glfwSwapInterval(1);
+        if (Settings.WINDOW_ENABLE_VSYNC)
+            glfwSwapInterval(1);
 
         // Make the window visible
         glfwShowWindow(glfwWindow);
@@ -119,11 +128,18 @@ public class Window {
         GL.createCapabilities();
 
         // Enable blending
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+        if (Settings.GL_ENABLE_BLENDING) {
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+        }
+
+        // Initialize the ImGui layer
+        this.imguiLayer = new ImGuiLayer(glfwWindow);
+        this.imguiLayer.initImGui();
+
 
         // Switch to the level editor scene
-        Window.changeScene(0);
+        Window.changeScene(Settings.ENGINE_DEFAULT_SCENE);
     }
 
     private void loop() {
@@ -143,6 +159,9 @@ public class Window {
                 currentScene.update(dt);
             }
 
+            // Update the ImGui layer
+            this.imguiLayer.update(dt, currentScene);
+
             // Swap the buffers
             glfwSwapBuffers(glfwWindow);
 
@@ -150,7 +169,22 @@ public class Window {
             endTime = (float)glfwGetTime();
             dt = endTime - beginTime;
             beginTime = endTime;
-
         }
+    }
+
+    public static int getWidth() {
+        return get().width;
+    }
+
+    public static int getHeight() {
+        return get().height;
+    }
+
+    public static void setWidth(int newWidth) {
+        get().width = newWidth;
+    }
+
+    public static void setHeight(int newHeight) {
+        get().height = newHeight;
     }
 }

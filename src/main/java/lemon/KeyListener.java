@@ -4,6 +4,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
 public class KeyListener {
+    // TODO: Implement an enum for keycodes
     private static KeyListener instance;
     private boolean keyPressed[] = new boolean[350];
 

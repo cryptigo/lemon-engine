@@ -19,6 +19,8 @@ public class Shader {
     private String filepath;
 
     public Shader(String filepath) {
+        // TODO: Implement comments
+
         this.filepath = filepath;
         try {
             String source = new String(Files.readAllBytes(Paths.get(filepath)));
@@ -26,6 +28,7 @@ public class Shader {
 
             // Find the first pattern after #type 'pattern'
             int index = source.indexOf("#type") + 6;
+            // TODO: Implement a more reliable solution for detecting the file encoding.
             int eol = source.indexOf(System.lineSeparator(), index);
             String firstPattern = source.substring(index, eol).trim();
 
