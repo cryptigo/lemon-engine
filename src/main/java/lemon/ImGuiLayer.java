@@ -37,7 +37,7 @@ public class ImGuiLayer {
         // Initialize ImGuiIO config
         final ImGuiIO io = ImGui.getIO();
 
-        io.setIniFilename("assets/imgui.ini");
+        io.setIniFilename("assets/data/config/imgui.ini");
         io.setConfigFlags(ImGuiConfigFlags.NavEnableKeyboard); // Navigation with keyboard
         io.setBackendFlags(ImGuiBackendFlags.HasMouseCursors); // Mouse cursors to display while resizing windows etc.
         io.setBackendPlatformName("imgui_java_impl_glfw");
@@ -165,7 +165,7 @@ public class ImGuiLayer {
         // Method initializes LWJGL3 renderer.
         // This method SHOULD be called after you've initialized your ImGui configuration (fonts and so on).
         // ImGui context should be created as well.
-        String glslVersion = "#version " + String.valueOf(Settings.GL_GLSL_VERSION).trim() + " " + Settings.GL_PROFILE.toLowerCase().trim();
+        String glslVersion = "#version 440 core";
         imGuiGl3.init(glslVersion);
     }
 
@@ -182,8 +182,8 @@ public class ImGuiLayer {
 
     private void startFrame(final float deltaTime) {
         // Get window properties and mouse position.
-        float[] winWidth = { Window.getWidth() };
-        float[] winHeight = { Window.getHeight() };
+        float[] winWidth = {Window.getWidth()};
+        float[] winHeight = {Window.getHeight()};
         double[] mousePosX = {0};
         double[] mousePosY = {0};
         glfwGetCursorPos(glfwWindow, mousePosX, mousePosY);
@@ -199,8 +199,6 @@ public class ImGuiLayer {
         final int imguiCursor = ImGui.getMouseCursor();
         glfwSetCursor(glfwWindow, mouseCursors[imguiCursor]);
         glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
-
     }
 
     private void endFrame() {

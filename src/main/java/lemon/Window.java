@@ -26,32 +26,32 @@ public class Window {
     private static Scene currentScene;
 
     private Window() {
-        this.width = Settings.DEFAULT_WINDOW_WIDTH;
-        this.height = Settings.DEFAULT_WINDOW_HEIGHT;
-        this.title = Settings.DEFAULT_WINDOW_TITLE;
+        this.width = 1920;
+        this.height = 1080;
+        this.title = "Lemon Engine V0.0.1";
         // TODO: Create a color class so I don't have to use coordinates.
-        r = Settings.DEFAULT_WINDOW_COLOR.x;
-        g = Settings.DEFAULT_WINDOW_COLOR.y;
-        b = Settings.DEFAULT_WINDOW_COLOR.z;
-        a = Settings.DEFAULT_WINDOW_COLOR.w;
+        r = 1;
+        g = 1;
+        b = 1;
+        a = 1;
     }
 
     public static void changeScene(int newScene) {
         switch (newScene) {
             case 0:
                 currentScene = new LevelEditorScene();
-                currentScene.init();
-                currentScene.start();
                 break;
             case 1:
                 currentScene = new LevelScene();
-                currentScene.init();
-                currentScene.start();
                 break;
             default:
                 assert false : "Unknown scene: '" + newScene + "'";
                 break;
         }
+
+        currentScene.load();
+        currentScene.init();
+        currentScene.start();
     }
 
     public static Window get() {
@@ -67,7 +67,7 @@ public class Window {
     }
 
     public void run() {
-        System.out.println("Engine Starting.");
+        System.out.println("== LEMON ENGINE V0.0.1 DEV ==");
         System.out.println("LWJGL Version: " + Version.getVersion());
 
         init();
@@ -128,10 +128,8 @@ public class Window {
         GL.createCapabilities();
 
         // Enable blending
-        if (Settings.GL_ENABLE_BLENDING) {
-            glEnable(GL_BLEND);
-            glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-        }
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
         // Initialize the ImGui layer
         this.imguiLayer = new ImGuiLayer(glfwWindow);
@@ -139,7 +137,7 @@ public class Window {
 
 
         // Switch to the level editor scene
-        Window.changeScene(Settings.ENGINE_DEFAULT_SCENE);
+        Window.changeScene(0);
     }
 
     private void loop() {
