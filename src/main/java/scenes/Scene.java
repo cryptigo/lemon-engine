@@ -1,9 +1,13 @@
-package lemon;
+package scenes;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import components.Component;
+import components.ComponentDeserializer;
 import imgui.ImGui;
+import lemon.Camera;
+import lemon.GameObject;
+import lemon.GameObjectDeserializer;
 import renderer.Renderer;
 
 import java.io.FileWriter;

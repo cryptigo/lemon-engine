@@ -1,4 +1,4 @@
-package lemon;
+package components;
 
 import com.google.gson.*;
 import components.Component;

@@ -1,4 +1,7 @@
-package lemon;
+package scenes;
+
+import lemon.Window;
+import scenes.Scene;
 
 public class LevelScene extends Scene {
     public LevelScene() {

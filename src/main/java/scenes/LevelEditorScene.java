@@ -1,30 +1,18 @@
-package lemon;
+package scenes;
 
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-
-import com.google.gson.Gson;
-import components.FontRenderer;
 import components.Sprite;
 import components.SpriteRenderer;
 import components.Spritesheet;
 import imgui.ImGui;
 import imgui.ImVec2;
+import lemon.Camera;
+import lemon.GameObject;
+import lemon.Transform;
 import org.joml.Vector4f;
-import org.lwjgl.BufferUtils;
 
 import org.joml.Vector2f;
-import renderer.Shader;
-import renderer.Texture;
+import scenes.Scene;
 import util.AssetPool;
-import util.Settings;
-import util.Time;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import static org.lwjgl.opengl.GL30.*;
-import static org.lwjgl.opengl.GL20.*;
 
 public class LevelEditorScene extends Scene {
 
