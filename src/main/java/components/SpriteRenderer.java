@@ -1,13 +1,11 @@
 package components;
 
 import imgui.ImGui;
-import lemon.Component;
 import lemon.Transform;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 import renderer.Texture;
 import util.Color;
-import util.Settings;
 
 public class SpriteRenderer extends Component {
 

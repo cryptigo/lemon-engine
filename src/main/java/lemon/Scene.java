@@ -2,6 +2,7 @@ package lemon;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import components.Component;
 import imgui.ImGui;
 import renderer.Renderer;
 
