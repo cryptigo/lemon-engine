@@ -1,5 +1,6 @@
 package scenes;
 
+import components.MouseControls;
 import components.Sprite;
 import components.SpriteRenderer;
 import components.Spritesheet;
@@ -7,6 +8,7 @@ import imgui.ImGui;
 import imgui.ImVec2;
 import lemon.Camera;
 import lemon.GameObject;
+import lemon.Prefabs;
 import lemon.Transform;
 import org.joml.Vector4f;
 
@@ -19,6 +21,8 @@ public class LevelEditorScene extends Scene {
     private GameObject obj1;
     private Spritesheet sprites;
     SpriteRenderer obj1Sprite;
+
+    MouseControls mouseControls = new MouseControls();
 
     public LevelEditorScene() {
 
@@ -64,6 +68,8 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void update(float dt) {
+        mouseControls.update(dt);
+
         for (GameObject go : this.gameObjects) {
             go.update(dt);
         }
@@ -92,7 +98,9 @@ public class LevelEditorScene extends Scene {
 
             ImGui.pushID(i);
             if (ImGui.imageButton(id, spriteWidth, spriteHeight, texCoords[2].x, texCoords[0].y, texCoords[0].x, texCoords[2].y)) {
-                System.out.println("Button: " + i + " clicked");
+                GameObject object = Prefabs.generateSpriteObject(sprite, spriteWidth, spriteHeight);
+                // Attach to the mouse cursor
+                mouseControls.pickupObject(object);
             }
             ImGui.popID();
 

@@ -63,6 +63,7 @@ public abstract class Scene {
             ImGui.begin("Inspector");
             activeGameObject.imgui();
             ImGui.end();
+            
         }
 
         imgui();
@@ -80,7 +81,7 @@ public abstract class Scene {
                 .create();
 
         try {
-            FileWriter writer = new FileWriter("level.txt");
+            FileWriter writer = new FileWriter("assets/data/saves/level.txt");
             writer.write(gson.toJson(this.gameObjects));
             writer.close();
         } catch(IOException e) {
@@ -97,7 +98,7 @@ public abstract class Scene {
 
         String inFile = "";
         try {
-            inFile = new String(Files.readAllBytes(Paths.get("level.txt")));
+            inFile = new String(Files.readAllBytes(Paths.get("assets/data/saves/level.txt")));
         } catch (IOException e) {
             e.printStackTrace();
         }

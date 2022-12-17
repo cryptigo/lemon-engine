@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameObject {
+    private static int ID_COUNTER = 0;
+    private int uid = -1;
+
     private String name;
     private List<Component> components;
     public Transform transform;
@@ -74,5 +77,13 @@ public class GameObject {
 
     public int zIndex() {
         return this.zIndex;
+    }
+
+    public int uid() {
+        return this.uid;
+    }
+
+    public static void init(int maxID) {
+        ID_COUNTER = maxID;
     }
 }
