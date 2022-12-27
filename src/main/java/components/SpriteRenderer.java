@@ -5,15 +5,14 @@ import lemon.Transform;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 import renderer.Texture;
-import util.Color;
 
 public class SpriteRenderer extends Component {
 
-    private Vector4f color = Color.WHITE;
+    private Vector4f color = new Vector4f(1, 1, 1, 1);
     private Sprite sprite = new Sprite();
 
     private transient Transform lastTransform;
-    private transient boolean isDirty = false;
+    private transient boolean isDirty = true;
 
     @Override
     public void start() {

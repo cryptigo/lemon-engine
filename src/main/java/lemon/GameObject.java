@@ -14,18 +14,14 @@ public class GameObject {
     public Transform transform;
     private int zIndex;
 
-    public GameObject(String name, Transform transform) {
-        this.name = name;
-        this.components = new ArrayList<>();
-        this.transform = transform;
-        this.zIndex = 0;
-    }
 
     public GameObject(String name, Transform transform, int zIndex) {
         this.name = name;
         this.zIndex = zIndex;
         this.components = new ArrayList<>();
         this.transform = transform;
+
+        this.uid = ID_COUNTER++;
     }
 
     public <T extends Component> T getComponent(Class<T> componentClass) {
@@ -53,8 +49,13 @@ public class GameObject {
     }
 
     public void addComponent(Component c) {
+        c.generateId();
         this.components.add(c);
         c.gameObject = this;
+    }
+
+    public List<Component> getAllComponents() {
+        return this.components;
     }
 
     public void update(float dt) {

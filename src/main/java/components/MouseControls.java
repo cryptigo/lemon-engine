@@ -6,7 +6,6 @@ import lemon.Window;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
-// Invisible to end user
 public class MouseControls extends Component {
     GameObject holdingObject = null;
 

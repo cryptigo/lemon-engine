@@ -9,7 +9,7 @@ public class MouseListener {
     private static MouseListener instance;
     private double scrollX, scrollY;
     private double xPos, yPos, lastY, lastX;
-    private boolean mouseButtonPressed[] = new boolean[3];
+    private boolean mouseButtonPressed[] = new boolean[9];
     private boolean isDragging;
 
     private MouseListener() {
@@ -34,7 +34,7 @@ public class MouseListener {
         get().lastY = get().yPos;
         get().xPos = xpos;
         get().yPos = ypos;
-        get().isDragging = get().mouseButtonPressed[0] ||  get().mouseButtonPressed[1] ||  get().mouseButtonPressed[2];
+        get().isDragging = get().mouseButtonPressed[0] || get().mouseButtonPressed[1] || get().mouseButtonPressed[2];
     }
 
     public static void mouseButtonCallback(long window, int button, int action, int mods) {
@@ -71,20 +71,20 @@ public class MouseListener {
     }
 
     public static float getOrthoX() {
-        float currentX = getY();
+        float currentX = getX();
         currentX = (currentX / (float)Window.getWidth()) * 2.0f - 1.0f;
         Vector4f tmp = new Vector4f(currentX, 0, 0, 1);
-        tmp.mul(Window.getScene().camera().getInverseProjection().mul(Window.getScene().camera().getInverseView()));
+        tmp.mul(Window.getScene().camera().getInverseProjection()).mul(Window.getScene().camera().getInverseView());
         currentX = tmp.x;
 
         return currentX;
     }
 
     public static float getOrthoY() {
-        float currentY = getY();
-        currentY = (currentY / (float)Window.getWidth()) * 2.0f - 1.0f;
+        float currentY = Window.getHeight() - getY();
+        currentY = (currentY / (float)Window.getHeight()) * 2.0f - 1.0f;
         Vector4f tmp = new Vector4f(0, currentY, 0, 1);
-        tmp.mul(Window.getScene().camera().getInverseProjection().mul(Window.getScene().camera().getInverseView()));
+        tmp.mul(Window.getScene().camera().getInverseProjection()).mul(Window.getScene().camera().getInverseView());
         currentY = tmp.y;
 
         return currentY;
@@ -117,5 +117,4 @@ public class MouseListener {
             return false;
         }
     }
-
 }

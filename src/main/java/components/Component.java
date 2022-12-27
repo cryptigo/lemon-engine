@@ -8,10 +8,10 @@ import org.joml.Vector4f;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-
 public abstract class Component {
     private static int ID_COUNTER = 0;
     private int uid = -1;
+
     public transient GameObject gameObject = null;
 
     public void start() {
@@ -59,7 +59,7 @@ public abstract class Component {
                     }
                 } else if (type == Vector3f.class) {
                     Vector3f val = (Vector3f)value;
-                    float[] imVec = {val.x, val.y, val.x};
+                    float[] imVec = {val.x, val.y, val.z};
                     if (ImGui.dragFloat3(name + ": ", imVec)) {
                         val.set(imVec[0], imVec[1], imVec[2]);
                     }
@@ -71,17 +71,17 @@ public abstract class Component {
                     }
                 }
 
+
                 if (isPrivate) {
                     field.setAccessible(false);
                 }
             }
-
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
     }
 
-    public void generateID() {
+    public void generateId() {
         if (this.uid == -1) {
             this.uid = ID_COUNTER++;
         }
@@ -91,7 +91,7 @@ public abstract class Component {
         return this.uid;
     }
 
-    public static void init(int maxID) {
-        ID_COUNTER = maxID;
+    public static void init(int maxId) {
+        ID_COUNTER = maxId;
     }
 }

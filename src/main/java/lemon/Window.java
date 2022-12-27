@@ -3,10 +3,10 @@ package lemon;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
+import renderer.DebugDraw;
 import scenes.LevelEditorScene;
 import scenes.LevelScene;
 import scenes.Scene;
-import util.Settings;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -20,19 +20,18 @@ public class Window {
     private ImGuiLayer imguiLayer;
 
     public float r, g, b, a;
-    private boolean fadeToBlack = false;
 
     private static Window window = null;
+
     private static Scene currentScene;
 
     private Window() {
         this.width = 1920;
         this.height = 1080;
-        this.title = "Lemon Engine V0.0.1";
-        // TODO: Create a color class so I don't have to use coordinates.
+        this.title = "Lemon Engine";
         r = 1;
-        g = 1;
         b = 1;
+        g = 1;
         a = 1;
     }
 
@@ -45,7 +44,7 @@ public class Window {
                 currentScene = new LevelScene();
                 break;
             default:
-                assert false : "Unknown scene: '" + newScene + "'";
+                assert false : "Unknown scene '" + newScene + "'";
                 break;
         }
 
@@ -73,22 +72,22 @@ public class Window {
         init();
         loop();
 
-        // Free memory
+        // Free the memory
         glfwFreeCallbacks(glfwWindow);
         glfwDestroyWindow(glfwWindow);
 
-        // Terminate GLFW and free the error callback
+        // Terminate GLFW and the free the error callback
         glfwTerminate();
         glfwSetErrorCallback(null).free();
     }
 
-    private void init() {
+    public void init() {
         // Setup an error callback
         GLFWErrorCallback.createPrint(System.err).set();
 
         // Initialize GLFW
-        if(!glfwInit()) {
-            throw new IllegalStateException("Unable to initialize GLFW!");
+        if (!glfwInit()) {
+            throw new IllegalStateException("Unable to initialize GLFW.");
         }
 
         // Configure GLFW
@@ -97,14 +96,12 @@ public class Window {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
 
-
         // Create the window
         glfwWindow = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
         if (glfwWindow == NULL) {
-            throw new IllegalStateException("Failed to create the GLFW window!");
+            throw new IllegalStateException("Failed to create the GLFW window.");
         }
 
-        // Setup callbacks
         glfwSetCursorPosCallback(glfwWindow, MouseListener::mousePosCallback);
         glfwSetMouseButtonCallback(glfwWindow, MouseListener::mouseButtonCallback);
         glfwSetScrollCallback(glfwWindow, MouseListener::mouseScrollCallback);
@@ -116,59 +113,54 @@ public class Window {
 
         // Make the OpenGL context current
         glfwMakeContextCurrent(glfwWindow);
-
-        // Enable VSync
-        if (Settings.WINDOW_ENABLE_VSYNC)
-            glfwSwapInterval(1);
+        // Enable v-sync
+        glfwSwapInterval(1);
 
         // Make the window visible
         glfwShowWindow(glfwWindow);
 
-        // Initialize OpenGL context
+        // This line is critical for LWJGL's interoperation with GLFW's
+        // OpenGL context, or any context that is managed externally.
+        // LWJGL detects the context that is current in the current thread,
+        // creates the GLCapabilities instance and makes the OpenGL
+        // bindings available for use.
         GL.createCapabilities();
 
-        // Enable blending
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-
-        // Initialize the ImGui layer
         this.imguiLayer = new ImGuiLayer(glfwWindow);
         this.imguiLayer.initImGui();
 
-
-        // Switch to the level editor scene
         Window.changeScene(0);
     }
 
-    private void loop() {
+    public void loop() {
         float beginTime = (float)glfwGetTime();
         float endTime;
         float dt = -1.0f;
 
-        currentScene.load();
         while (!glfwWindowShouldClose(glfwWindow)) {
-            // Poll for events
+            // Poll events
             glfwPollEvents();
 
-            // Clear the background
+            DebugDraw.beginFrame();
+
             glClearColor(r, g, b, a);
             glClear(GL_COLOR_BUFFER_BIT);
 
             if (dt >= 0) {
+                DebugDraw.draw();
                 currentScene.update(dt);
             }
 
-            // Update the ImGui layer
             this.imguiLayer.update(dt, currentScene);
-
-            // Swap the buffers
             glfwSwapBuffers(glfwWindow);
 
-            // Calculate deltaTime
             endTime = (float)glfwGetTime();
             dt = endTime - beginTime;
             beginTime = endTime;
         }
+
         currentScene.saveExit();
     }
 

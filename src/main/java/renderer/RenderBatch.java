@@ -4,7 +4,6 @@ import components.SpriteRenderer;
 import lemon.Window;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
-import org.lwjgl.opengl.GL15C;
 import util.AssetPool;
 
 import java.util.ArrayList;
@@ -17,14 +16,11 @@ import static org.lwjgl.opengl.GL20C.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
-public class RenderBatch implements Comparable<RenderBatch>  {
-
-    // - VERTEX -
-    // ┌───────────────────┬────────────────────────────┐
-    // │ Position          │ Color                      │
-    // ├───────────────────┼────────────────────────────┤
-    // │ float, float      │ float, float, float, float │
-    // └───────────────────┴────────────────────────────┘
+public class RenderBatch implements Comparable<RenderBatch> {
+    // Vertex
+    // ======
+    // Pos               Color                         tex coords     tex id
+    // float, float,     float, float, float, float    float, float   float
     private final int POS_SIZE = 2;
     private final int COLOR_SIZE = 4;
     private final int TEX_COORDS_SIZE = 2;
@@ -123,11 +119,9 @@ public class RenderBatch implements Comparable<RenderBatch>  {
                 rebufferData = true;
             }
         }
-
         if (rebufferData) {
             glBindBuffer(GL_ARRAY_BUFFER, vboID);
             glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
-
         }
 
         // Use shader
@@ -214,6 +208,7 @@ public class RenderBatch implements Comparable<RenderBatch>  {
         for (int i=0; i < maxBatchSize; i++) {
             loadElementIndices(elements, i);
         }
+
         return elements;
     }
 

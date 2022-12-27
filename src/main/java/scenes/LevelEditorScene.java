@@ -10,9 +10,11 @@ import lemon.Camera;
 import lemon.GameObject;
 import lemon.Prefabs;
 import lemon.Transform;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import org.joml.Vector2f;
+import renderer.DebugDraw;
 import scenes.Scene;
 import util.AssetPool;
 
@@ -33,6 +35,7 @@ public class LevelEditorScene extends Scene {
         loadResources();
         this.camera = new Camera(new Vector2f(-250, 0));
         sprites = AssetPool.getSpritesheet("assets/images/spritesheets/decorationsAndBlocks.png");
+        DebugDraw.addLine2D(new Vector2f(0, 0), new Vector2f(800, 800), new Vector3f(1, 0, 0), 120);
         if (levelLoaded) {
             this.activeGameObject = gameObjects.get(0);
             return;
@@ -54,6 +57,7 @@ public class LevelEditorScene extends Scene {
         obj2SpriteRenderer.setSprite(obj2Sprite);
         obj2.addComponent(obj2SpriteRenderer);
         this.addGameObjectToScene(obj2);
+
     }
 
     private void loadResources() {
@@ -93,7 +97,7 @@ public class LevelEditorScene extends Scene {
             Sprite sprite = sprites.getSprite(i);
             float spriteWidth = sprite.getWidth() * 4;
             float spriteHeight = sprite.getHeight() * 4;
-            int id = sprite.getTexID();
+            int id = sprite.getTexId();
             Vector2f[] texCoords = sprite.getTexCoords();
 
             ImGui.pushID(i);
