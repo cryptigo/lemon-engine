@@ -1,18 +1,17 @@
 package lemon;
 
 import editor.GameViewWindow;
+import editor.PropertiesWindow;
 import imgui.*;
-
 import imgui.callback.ImStrConsumer;
 import imgui.callback.ImStrSupplier;
 import imgui.flag.*;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.type.ImBoolean;
+import renderer.PickingTexture;
 import scenes.Scene;
 
-
 import static org.lwjgl.glfw.GLFW.*;
-
 
 public class ImGuiLayer {
 
@@ -21,11 +20,16 @@ public class ImGuiLayer {
     // Mouse cursors provided by GLFW
     private final long[] mouseCursors = new long[ImGuiMouseCursor.COUNT];
 
-    // LWJGL Renderer
+    // LWJGL3 renderer (SHOULD be initialized)
     private final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
 
-    public ImGuiLayer(long glfwWindow) {
+    private GameViewWindow gameViewWindow;
+    private PropertiesWindow propertiesWindow;
+
+    public ImGuiLayer(long glfwWindow, PickingTexture pickingTexture) {
         this.glfwWindow = glfwWindow;
+        this.gameViewWindow = new GameViewWindow();
+        this.propertiesWindow = new PropertiesWindow(pickingTexture);
     }
 
     // Initialize Dear ImGui.
@@ -38,7 +42,7 @@ public class ImGuiLayer {
         // Initialize ImGuiIO config
         final ImGuiIO io = ImGui.getIO();
 
-        io.setIniFilename("assets/data/config/imgui.ini");
+        io.setIniFilename("assets/data/config/imgui.ini"); // We don't want to save .ini file
         io.setConfigFlags(ImGuiConfigFlags.NavEnableKeyboard); // Navigation with keyboard
         io.setConfigFlags(ImGuiConfigFlags.DockingEnable);
         io.setBackendFlags(ImGuiBackendFlags.HasMouseCursors); // Mouse cursors to display while resizing windows etc.
@@ -101,9 +105,7 @@ public class ImGuiLayer {
             if (!io.getWantCaptureKeyboard()) {
                 KeyListener.keyCallback(w, key, scancode, action, mods);
             }
-
         });
-
 
         glfwSetCharCallback(glfwWindow, (w, c) -> {
             if (c != GLFW_KEY_DELETE) {
@@ -126,7 +128,7 @@ public class ImGuiLayer {
                 ImGui.setWindowFocus(null);
             }
 
-            if (!io.getWantCaptureMouse() || GameViewWindow.getWantCaptureMouse()) {
+            if (!io.getWantCaptureMouse() || gameViewWindow.getWantCaptureMouse()) {
                 MouseListener.mouseButtonCallback(w, button, action, mods);
             }
         });
@@ -157,6 +159,7 @@ public class ImGuiLayer {
 
         // ------------------------------------------------------------
         // Fonts configuration
+        // Read: https://raw.githubusercontent.com/ocornut/imgui/master/docs/FONTS.txt
 
         final ImFontAtlas fontAtlas = io.getFonts();
         final ImFontConfig fontConfig = new ImFontConfig(); // Natively allocated object, should be explicitly destroyed
@@ -177,18 +180,20 @@ public class ImGuiLayer {
         // Method initializes LWJGL3 renderer.
         // This method SHOULD be called after you've initialized your ImGui configuration (fonts and so on).
         // ImGui context should be created as well.
-        String glslVersion = "#version 440 core";
-        imGuiGl3.init(glslVersion);
+        imGuiGl3.init("#version 440 core");
     }
 
     public void update(float dt, Scene currentScene) {
         startFrame(dt);
 
+        // Any Dear ImGui code SHOULD go between ImGui.newFrame()/ImGui.render() methods
         ImGui.newFrame();
         setupDockspace();
-        currentScene.sceneImgui();
+        currentScene.imgui();
         ImGui.showDemoWindow();
-        GameViewWindow.imgui();
+        gameViewWindow.imgui();
+        propertiesWindow.update(dt, currentScene);
+        propertiesWindow.imgui();
         ImGui.end();
         ImGui.render();
 
@@ -196,18 +201,18 @@ public class ImGuiLayer {
     }
 
     private void startFrame(final float deltaTime) {
-        // Get window properties and mouse position.
+        // Get window properties and mouse position
         float[] winWidth = {Window.getWidth()};
         float[] winHeight = {Window.getHeight()};
         double[] mousePosX = {0};
         double[] mousePosY = {0};
         glfwGetCursorPos(glfwWindow, mousePosX, mousePosY);
 
-        // Update ImGui state for the current frame
+        // We SHOULD call those methods to update Dear ImGui state for the current frame
         final ImGuiIO io = ImGui.getIO();
         io.setDisplaySize(winWidth[0], winHeight[0]);
         io.setDisplayFramebufferScale(1f, 1f);
-        io.setMousePos((float)mousePosX[0], (float)mousePosY[0]);
+        io.setMousePos((float) mousePosX[0], (float) mousePosY[0]);
         io.setDeltaTime(deltaTime);
 
         // Update the mouse cursor
@@ -217,10 +222,12 @@ public class ImGuiLayer {
     }
 
     private void endFrame() {
+        // After Dear ImGui prepared a draw data, we use it in the LWJGL3 renderer.
+        // At that moment ImGui will be rendered to the current OpenGL context.
         imGuiGl3.render(ImGui.getDrawData());
     }
 
-    // Clean up after ImGui.
+    // If you want to clean a room after yourself - do it by yourself
     private void destroyImGui() {
         imGuiGl3.dispose();
         ImGui.destroyContext();

@@ -3,11 +3,11 @@ package lemon;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
-import renderer.DebugDraw;
-import renderer.Framebuffer;
+import renderer.*;
 import scenes.LevelEditorScene;
 import scenes.LevelScene;
 import scenes.Scene;
+import util.AssetPool;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -20,14 +20,14 @@ public class Window {
     private long glfwWindow;
     private ImGuiLayer imguiLayer;
     private Framebuffer framebuffer;
+    private PickingTexture pickingTexture;
 
     public float r, g, b, a;
+    private boolean fadeToBlack = false;
 
     private static Window window = null;
 
     private static Scene currentScene;
-
-
 
     private Window() {
         this.width = 1920;
@@ -70,8 +70,6 @@ public class Window {
     }
 
     public void run() {
-        System.out.println("== LEMON ENGINE V0.0.1 DEV ==");
-        System.out.println("LWJGL Version: " + Version.getVersion());
 
         init();
         loop();
@@ -91,7 +89,7 @@ public class Window {
 
         // Initialize GLFW
         if (!glfwInit()) {
-            throw new IllegalStateException("Unable to initialize GLFW.");
+            throw new IllegalStateException("(Window) ERROR: Unable to initialize GLFW.");
         }
 
         // Configure GLFW
@@ -103,7 +101,7 @@ public class Window {
         // Create the window
         glfwWindow = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
         if (glfwWindow == NULL) {
-            throw new IllegalStateException("Failed to create the GLFW window.");
+            throw new IllegalStateException("(Window) ERROR: Failed to create the GLFW window.");
         }
 
         glfwSetCursorPosCallback(glfwWindow, MouseListener::mousePosCallback);
@@ -132,11 +130,13 @@ public class Window {
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-        this.imguiLayer = new ImGuiLayer(glfwWindow);
-        this.imguiLayer.initImGui();
 
         this.framebuffer = new Framebuffer(1920, 1080);
+        this.pickingTexture = new PickingTexture(1920, 1080);
         glViewport(0, 0, 1920, 1080);
+
+        this.imguiLayer = new ImGuiLayer(glfwWindow, pickingTexture);
+        this.imguiLayer.initImGui();
 
         Window.changeScene(0);
     }
@@ -146,10 +146,28 @@ public class Window {
         float endTime;
         float dt = -1.0f;
 
+        Shader defaultShader = AssetPool.getShader("assets/data/shaders/default.glsl");
+        Shader pickingShader = AssetPool.getShader("assets/data/shaders/pickingShader.glsl");
+
         while (!glfwWindowShouldClose(glfwWindow)) {
             // Poll events
             glfwPollEvents();
 
+            // Render pass 1. Render to picking texture
+            glDisable(GL_BLEND);
+            pickingTexture.enableWriting();
+
+            glViewport(0, 0, 1920, 1080);
+            glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            Renderer.bindShader(pickingShader);
+            currentScene.render();
+
+            pickingTexture.disableWriting();
+            glEnable(GL_BLEND);
+
+            // Render pass 2. Render actual game
             DebugDraw.beginFrame();
 
             this.framebuffer.bind();
@@ -158,7 +176,9 @@ public class Window {
 
             if (dt >= 0) {
                 DebugDraw.draw();
+                Renderer.bindShader(defaultShader);
                 currentScene.update(dt);
+                currentScene.render();
             }
             this.framebuffer.unbind();
 

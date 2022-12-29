@@ -36,12 +36,7 @@ public class LevelEditorScene extends Scene {
         loadResources();
         this.camera = new Camera(new Vector2f(-250, 0));
         sprites = AssetPool.getSpritesheet("assets/images/spritesheets/decorationsAndBlocks.png");
-        if (levelLoaded) {
-            if (gameObjects.size() > 0) {
-                this.activeGameObject = gameObjects.get(0);
-            }
-            return;
-        }
+
 
     }
 
@@ -70,7 +65,10 @@ public class LevelEditorScene extends Scene {
         for (GameObject go : this.gameObjects) {
             go.update(dt);
         }
+    }
 
+    @Override
+    public void render() {
         this.renderer.render();
     }
 
@@ -96,7 +94,6 @@ public class LevelEditorScene extends Scene {
             ImGui.pushID(i);
             if (ImGui.imageButton(id, spriteWidth, spriteHeight, texCoords[2].x, texCoords[0].y, texCoords[0].x, texCoords[2].y)) {
                 GameObject object = Prefabs.generateSpriteObject(sprite, 32, 32);
-                // Attach to the mouse cursor
                 levelEditorStuff.getComponent(MouseControls.class).pickupObject(object);
             }
             ImGui.popID();
@@ -105,11 +102,11 @@ public class LevelEditorScene extends Scene {
             ImGui.getItemRectMax(lastButtonPos);
             float lastButtonX2 = lastButtonPos.x;
             float nextButtonX2 = lastButtonX2 + itemSpacing.x + spriteWidth;
-
             if (i + 1 < sprites.size() && nextButtonX2 < windowX2) {
                 ImGui.sameLine();
             }
         }
+
         ImGui.end();
     }
 }

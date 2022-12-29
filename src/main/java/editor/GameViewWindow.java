@@ -1,12 +1,14 @@
 package editor;
 
-import imgui.*;
-import imgui.flag.*;
+import imgui.ImGui;
+import imgui.ImVec2;
+import imgui.flag.ImGuiWindowFlags;
 import lemon.MouseListener;
 import lemon.Window;
 import org.joml.Vector2f;
 
 public class GameViewWindow {
+
     private static float leftX, rightX, topY, bottomY;
 
     public static void imgui() {
@@ -49,10 +51,11 @@ public class GameViewWindow {
         float aspectWidth = windowSize.x;
         float aspectHeight = aspectWidth / Window.getTargetAspectRatio();
         if (aspectHeight > windowSize.y) {
-            // Switch to pillarbox mode
+            // We must switch to pillarbox mode
             aspectHeight = windowSize.y;
             aspectWidth = aspectHeight * Window.getTargetAspectRatio();
         }
+
         return new ImVec2(aspectWidth, aspectHeight);
     }
 
@@ -65,6 +68,7 @@ public class GameViewWindow {
         float viewportX = (windowSize.x / 2.0f) - (aspectSize.x / 2.0f);
         float viewportY = (windowSize.y / 2.0f) - (aspectSize.y / 2.0f);
 
-        return new ImVec2(viewportX + ImGui.getCursorPosX(), viewportY + ImGui.getCursorPosY());
+        return new ImVec2(viewportX + ImGui.getCursorPosX(),
+                viewportY + ImGui.getCursorPosY());
     }
 }

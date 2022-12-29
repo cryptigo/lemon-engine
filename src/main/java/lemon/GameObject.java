@@ -80,11 +80,13 @@ public class GameObject {
         return this.zIndex;
     }
 
-    public int uid() {
+    public int getUid() {
         return this.uid;
     }
 
     public static void init(int maxID) {
         ID_COUNTER = maxID;
     }
+
+
 }
