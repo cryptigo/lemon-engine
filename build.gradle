@@ -10,7 +10,12 @@ project.ext.jomlVersion = "1.10.5"
 project.ext.lwjglNatives = "natives-linux"
 project.ext.imguiVersion = '1.77-0.17.1'
 
+sourceCompatibility = 1.8
+
 repositories {
+    flatDir {
+        dirs 'libs'
+    }
     mavenCentral()
     jcenter()
 }
@@ -51,6 +56,9 @@ dependencies {
 
     // OSHI
     implementation "com.github.oshi:oshi-core:6.4.0"
+
+    // Box2D
+    implementation name: 'jbox2d-library'
 
 }
 

@@ -8,6 +8,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import physics2d.Physics2D;
 import util.AssetPool;
 import util.Log;
 
@@ -16,6 +17,7 @@ public class LevelEditorScene extends Scene {
     private Spritesheet sprites;
 
     GameObject levelEditorStuff = this.createGameObject("LevelEditor");
+    Physics2D physics = new Physics2D();
     Transform obj1, obj2;
 
     public LevelEditorScene() {
@@ -68,6 +70,7 @@ public class LevelEditorScene extends Scene {
             go.update(dt);
         }
 
+        physics.update(dt);
     }
 
     @Override
