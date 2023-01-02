@@ -1,6 +1,7 @@
 package lemon;
 
 import components.Component;
+import editor.LImGui;
 import org.joml.Vector2f;
 
 public class Transform extends Component {
@@ -26,6 +27,14 @@ public class Transform extends Component {
         this.position = position;
         this.scale = scale;
         this.zIndex = 0;
+    }
+
+    @Override
+    public void imgui() {
+        LImGui.drawVec2Control("Position", this.position);
+        LImGui.drawVec2Control("Scale", this.scale, 32.0f);
+        this.rotation = LImGui.dragFloat("Rotation", this.rotation);
+        this.zIndex = LImGui.dragInt("Z-Index", this.zIndex);
     }
 
     public Transform copy() {

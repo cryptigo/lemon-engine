@@ -1,6 +1,7 @@
 package lemon;
 
 import components.Component;
+import imgui.ImGui;
 import util.Log;
 
 import java.util.ArrayList;
@@ -68,7 +69,8 @@ public class GameObject {
 
     public void imgui() {
         for (Component c : components) {
-            c.imgui();
+            if (ImGui.collapsingHeader(c.getClass().getSimpleName()))
+                c.imgui();
         }
     }
 

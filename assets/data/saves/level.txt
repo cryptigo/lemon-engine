@@ -7,7 +7,7 @@
         "type": "lemon.Transform",
         "properties": {
           "position": {
-            "x": 260.1513,
+            "x": 330.23065,
             "y": 282.74484
           },
           "scale": {
@@ -56,6 +56,192 @@
             ]
           },
           "uid": 20
+        }
+      }
+    ],
+    "doSerialization": true
+  },
+  {
+    "uid": 2,
+    "name": "Sprite_Object_Gen",
+    "components": [
+      {
+        "type": "lemon.Transform",
+        "properties": {
+          "position": {
+            "x": 210.99771,
+            "y": 238.48462
+          },
+          "scale": {
+            "x": 32.0,
+            "y": 32.0
+          },
+          "rotation": 0.0,
+          "zIndex": 0,
+          "uid": 39
+        }
+      },
+      {
+        "type": "components.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.7857144,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "filepath": "assets/images/spritesheets/decorationsAndBlocks.png",
+              "width": 112,
+              "height": 192
+            },
+            "texCoords": [
+              {
+                "x": 0.14285715,
+                "y": 0.9166667
+              },
+              {
+                "x": 0.14285715,
+                "y": 0.8333333
+              },
+              {
+                "x": 0.0,
+                "y": 0.8333333
+              },
+              {
+                "x": 0.0,
+                "y": 0.9166667
+              }
+            ]
+          },
+          "uid": 40
+        }
+      }
+    ],
+    "doSerialization": true
+  },
+  {
+    "uid": 3,
+    "name": "Sprite_Object_Gen",
+    "components": [
+      {
+        "type": "lemon.Transform",
+        "properties": {
+          "position": {
+            "x": 134.33739,
+            "y": 226.67725
+          },
+          "scale": {
+            "x": 123.251976,
+            "y": 86.95397
+          },
+          "rotation": 0.0,
+          "zIndex": 0,
+          "uid": 59
+        }
+      },
+      {
+        "type": "components.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 0.68988764,
+            "y": 0.5333064,
+            "z": 0.5333064,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "filepath": "assets/images/spritesheets/decorationsAndBlocks.png",
+              "width": 112,
+              "height": 192
+            },
+            "texCoords": [
+              {
+                "x": 0.14285715,
+                "y": 0.5833333
+              },
+              {
+                "x": 0.14285715,
+                "y": 0.5
+              },
+              {
+                "x": 0.0,
+                "y": 0.5
+              },
+              {
+                "x": 0.0,
+                "y": 0.5833333
+              }
+            ]
+          },
+          "uid": 60
+        }
+      }
+    ],
+    "doSerialization": true
+  },
+  {
+    "uid": 8,
+    "name": "Sprite_Object_Gen",
+    "components": [
+      {
+        "type": "lemon.Transform",
+        "properties": {
+          "position": {
+            "x": 162.95705,
+            "y": 241.46313
+          },
+          "scale": {
+            "x": 32.0,
+            "y": 32.0
+          },
+          "rotation": 46.5,
+          "zIndex": 80,
+          "uid": 79
+        }
+      },
+      {
+        "type": "components.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "filepath": "assets/images/spritesheets/decorationsAndBlocks.png",
+              "width": 112,
+              "height": 192
+            },
+            "texCoords": [
+              {
+                "x": 0.14285715,
+                "y": 0.6666667
+              },
+              {
+                "x": 0.14285715,
+                "y": 0.5833333
+              },
+              {
+                "x": 0.0,
+                "y": 0.5833333
+              },
+              {
+                "x": 0.0,
+                "y": 0.6666667
+              }
+            ]
+          },
+          "uid": 80
         }
       }
     ],
