@@ -30,7 +30,7 @@ public class ImGuiLayer {
     private PropertiesWindow propertiesWindow;
 
     public ImGuiLayer(long glfwWindow, PickingTexture pickingTexture) {
-        Log.lemon("ImGuiLayer", "ImGuiLayer()");
+        Log.lemon("ImGuiLayer", "Constructed new ImGuiLayer(long, PickingTexture)");
 
         this.glfwWindow = glfwWindow;
         this.gameViewWindow = new GameViewWindow();
@@ -43,10 +43,12 @@ public class ImGuiLayer {
 
         // IMPORTANT!!
         // This line is critical for Dear ImGui to work.
+        Log.lemon("ImGuiLayer", "Creating ImGui context");
         ImGui.createContext();
 
         // ------------------------------------------------------------
         // Initialize ImGuiIO config
+        Log.lemon("ImGuiLayer", "Initializing ImGuiIO config");
         final ImGuiIO io = ImGui.getIO();
 
         io.setIniFilename("assets/data/config/imgui.ini"); // We don't want to save .ini file
@@ -57,6 +59,7 @@ public class ImGuiLayer {
 
         // ------------------------------------------------------------
         // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array.
+        Log.lemon("ImGuiLayer", "Initializing keyboard mapping");
         final int[] keyMap = new int[ImGuiKey.COUNT];
         keyMap[ImGuiKey.Tab] = GLFW_KEY_TAB;
         keyMap[ImGuiKey.LeftArrow] = GLFW_KEY_LEFT;
@@ -84,6 +87,7 @@ public class ImGuiLayer {
 
         // ------------------------------------------------------------
         // Mouse cursors mapping
+        Log.lemon("ImGuiLayer", "Initializing mouse cursor mapping");
         mouseCursors[ImGuiMouseCursor.Arrow] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
         mouseCursors[ImGuiMouseCursor.TextInput] = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
         mouseCursors[ImGuiMouseCursor.ResizeAll] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
@@ -96,7 +100,7 @@ public class ImGuiLayer {
 
         // ------------------------------------------------------------
         // GLFW callbacks to handle user input
-
+        Log.lemon("ImGuiLayer", "Setting up GLFW callbacks");
         glfwSetKeyCallback(glfwWindow, (w, key, scancode, action, mods) -> {
             if (action == GLFW_PRESS) {
                 io.setKeysDown(key, true);
@@ -169,6 +173,8 @@ public class ImGuiLayer {
         // Fonts configuration
         // Read: https://raw.githubusercontent.com/ocornut/imgui/master/docs/FONTS.txt
 
+        Log.lemon("ImGuiLayer", "Configuring fonts");
+
         final ImFontAtlas fontAtlas = io.getFonts();
         final ImFontConfig fontConfig = new ImFontConfig(); // Natively allocated object, should be explicitly destroyed
 
@@ -188,6 +194,7 @@ public class ImGuiLayer {
         // Method initializes LWJGL3 renderer.
         // This method SHOULD be called after you've initialized your ImGui configuration (fonts and so on).
         // ImGui context should be created as well.
+        Log.lemon("ImGuiLayer", "Configuring ImGui to use GLSL version 440 core");
         imGuiGl3.init("#version 440 core");
     }
 

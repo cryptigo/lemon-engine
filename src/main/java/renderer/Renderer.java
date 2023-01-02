@@ -21,7 +21,7 @@ public class Renderer {
     }
 
     public void add(GameObject go) {
-        //Log.renderer("Renderer", "add()");
+        //Log.renderer("Renderer", "add(GameObject)");
         SpriteRenderer spr = go.getComponent(SpriteRenderer.class);
         if (spr != null) {
             add(spr);
@@ -52,7 +52,7 @@ public class Renderer {
     }
 
     public static void bindShader(Shader shader) {
-        //Log.renderer("Renderer", "bindShader()");
+        //Log.renderer("Renderer", "bindShader(Shader)");
         currentShader = shader;
     }
 

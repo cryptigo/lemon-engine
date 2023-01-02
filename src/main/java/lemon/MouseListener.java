@@ -3,6 +3,7 @@ package lemon;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
+import util.Log;
 
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
@@ -20,6 +21,7 @@ public class MouseListener {
     private Vector2f gameViewportSize = new Vector2f();
 
     private MouseListener() {
+        Log.lemon("MouseListener", "MouseListener()");
         this.scrollX = 0.0;
         this.scrollY = 0.0;
         this.xPos = 0.0;
@@ -120,6 +122,7 @@ public class MouseListener {
 
     public static boolean mouseButtonDown(int button) {
         if (button < get().mouseButtonPressed.length) {
+            //Log.lemon("MouseListener", "mouseButtonDown: " + button);
             return get().mouseButtonPressed[button];
         } else {
             return false;

@@ -21,7 +21,7 @@ public class Texture {
     }
 
     public Texture(int width, int height) {
-        Log.renderer("Texture", "Texture()");
+        Log.renderer("Texture", "Texture(int, int) -> width=" + width + ", height=" + height);
         this.filepath = "Generated";
 
         // Generate texture on GPU
@@ -36,7 +36,7 @@ public class Texture {
     }
 
     public void init(String filepath) {
-        Log.renderer("Texture", "init() -> " + filepath);
+        Log.renderer("Texture", "init(String) -> " + filepath);
         this.filepath = filepath;
 
         // Generate texture on GPU

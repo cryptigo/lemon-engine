@@ -13,7 +13,7 @@ public class Spritesheet {
 
     // Creates a new Spritesheet object from an image texture.
     public Spritesheet(Texture texture, int spriteWidth, int spriteHeight, int numSprites, int spacing) {
-        Log.debug("Spritesheet", "Spritesheet()");
+        Log.renderer("Spritesheet", "Spritesheet()");
         this.sprites = new ArrayList<>();
 
         this.texture = texture;

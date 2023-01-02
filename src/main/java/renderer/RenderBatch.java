@@ -49,7 +49,7 @@ public class RenderBatch implements Comparable<RenderBatch> {
     private int zIndex;
 
     public RenderBatch(int maxBatchSize, int zIndex) {
-        Log.renderer("RenderBatch", "RenderBatch()");
+        Log.renderer("RenderBatch", "RenderBatch(int, int) -> maxBatchSize=" + maxBatchSize + ", zIndex=" + zIndex);
         this.zIndex = zIndex;
         this.sprites = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;
@@ -67,21 +67,27 @@ public class RenderBatch implements Comparable<RenderBatch> {
         Log.renderer("RenderBatch", "start()");
 
         // Generate and bind a Vertex Array Object
+        Log.renderer("RenderBatch", "Generating the Vertex Array Object (VAO)");
         vaoID = glGenVertexArrays();
         glBindVertexArray(vaoID);
 
         // Allocate space for vertices
+        Log.renderer("RenderBatch", "Generating the Vertex Buffer Object (VBO)");
         vboID = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferData(GL_ARRAY_BUFFER, vertices.length * Float.BYTES, GL_DYNAMIC_DRAW);
 
         // Create and upload indices buffer
+        Log.renderer("RenderBatch", "Creating the Element Buffer Object (EBO)");
+
         int eboID = glGenBuffers();
         int[] indices = generateIndices();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
 
         // Enable the buffer attribute pointers
+        Log.renderer("RenderBatch", "Enabling the Vertex Buffer attribute pointers");
+
         glVertexAttribPointer(0, POS_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, POS_OFFSET);
         glEnableVertexAttribArray(0);
 
@@ -233,7 +239,7 @@ public class RenderBatch implements Comparable<RenderBatch> {
     }
 
     private int[] generateIndices() {
-        Log.debug("LevelEditorScene", "generateIndices()");
+        Log.renderer("RenderBatch", "generateIndices()");
 
         // 6 indices per quad (3 per triangle)
         int[] elements = new int[6 * maxBatchSize];

@@ -9,8 +9,10 @@ public class Framebuffer {
     private Texture texture = null;
 
     public Framebuffer(int width, int height) {
-        Log.renderer("Framebuffer", "Framebuffer()");
+        Log.renderer("Framebuffer", "Constructed new Framebuffer, width=" + width + ", height=" + height);
+
         // Generate framebuffer
+        Log.renderer("Framebuffer", "Generating framebuffer");
         fboID = glGenFramebuffers();
         glBindFramebuffer(GL_FRAMEBUFFER, fboID);
 
@@ -19,6 +21,7 @@ public class Framebuffer {
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this.texture.getId(), 0);
 
         // Create a render buffer to store the depth info
+        Log.renderer("Framebuffer", "Creating the renderbuffer");
         int rboID = glGenRenderbuffers();
         glBindRenderbuffer(GL_RENDERBUFFER, rboID);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, width, height);

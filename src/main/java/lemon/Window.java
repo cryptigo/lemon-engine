@@ -8,6 +8,7 @@ import scenes.LevelEditorScene;
 import scenes.LevelScene;
 import scenes.Scene;
 import util.AssetPool;
+import util.Log;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -30,6 +31,7 @@ public class Window {
     private static Scene currentScene;
 
     private Window() {
+        Log.lemon("Window", "Window()");
         this.width = 1920;
         this.height = 1080;
         this.title = "Lemon Engine";
@@ -40,6 +42,8 @@ public class Window {
     }
 
     public static void changeScene(int newScene) {
+        Log.lemon("Window", "changeScene(" + newScene + ")");
+
         switch (newScene) {
             case 0:
                 currentScene = new LevelEditorScene();
@@ -83,26 +87,34 @@ public class Window {
     }
 
     public void init() {
+        Log.lemon("Window", "init()");
+
+
         // Setup an error callback
+        Log.lemon("Window", "Creating error callback");
         GLFWErrorCallback.createPrint(System.err).set();
 
         // Initialize GLFW
+        Log.lemon("Window", "Initializing GLFW");
         if (!glfwInit()) {
             throw new IllegalStateException("Unable to initialize GLFW.");
         }
 
         // Configure GLFW
+        Log.lemon("Window", "Configuring GLFW");
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
 
         // Create the window
+        Log.lemon("Window", "Creating GLFW window");
         glfwWindow = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
         if (glfwWindow == NULL) {
             throw new IllegalStateException("Failed to create the GLFW window.");
         }
 
+        Log.lemon("Window", "Setting GLFW Callbacks");
         glfwSetCursorPosCallback(glfwWindow, MouseListener::mousePosCallback);
         glfwSetMouseButtonCallback(glfwWindow, MouseListener::mouseButtonCallback);
         glfwSetScrollCallback(glfwWindow, MouseListener::mouseScrollCallback);
@@ -125,7 +137,9 @@ public class Window {
         // LWJGL detects the context that is current in the current thread,
         // creates the GLCapabilities instance and makes the OpenGL
         // bindings available for use.
+        Log.lemon("Window", "Initialize OpenGL capabilities");
         GL.createCapabilities();
+
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
@@ -134,9 +148,11 @@ public class Window {
         this.pickingTexture = new PickingTexture(1920, 1080);
         glViewport(0, 0, 1920, 1080);
 
+        Log.lemon("Window", "Creating the ImGuiLayer");
         this.imguiLayer = new ImGuiLayer(glfwWindow, pickingTexture);
         this.imguiLayer.initImGui();
 
+        Log.lemon("Window", "Switching to the Level Editor scene");
         Window.changeScene(0);
     }
 
@@ -189,7 +205,7 @@ public class Window {
             dt = endTime - beginTime;
             beginTime = endTime;
         }
-
+        Log.lemon("Window", "Closing window");
         currentScene.saveExit();
     }
 

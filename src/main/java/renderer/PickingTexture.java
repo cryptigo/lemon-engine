@@ -13,7 +13,7 @@ public class PickingTexture {
     private int depthTexture;
 
     public PickingTexture(int width, int height) {
-        Log.renderer("PickingTexture", "PickingTexture()");
+        Log.renderer("PickingTexture", "PickingTexture(int, int) -> width=" + width + ", height=" + height);
 
         if (!init(width, height)) {
             assert false : "Error initializing picking texture";
@@ -21,6 +21,7 @@ public class PickingTexture {
     }
 
     public boolean init(int width, int height) {
+        Log.renderer("PickingTexture", "init(int, int) -> width=" + width + ", height=" + height);
         // Generate framebuffer
         fbo = glGenFramebuffers();
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -62,15 +63,19 @@ public class PickingTexture {
     }
 
     public void enableWriting() {
-
+        //Log.renderer("PickingTexture", "Enabling writing");
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo);
     }
 
     public void disableWriting() {
+        //Log.renderer("PickingTexture", "Disabling writing");
+
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
     }
 
     public int readPixel(int x, int y) {
+        Log.renderer("PickingTexture", "readPixel(int, int) -> x=" + x + ", y=" + y);
+
         glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
         glReadBuffer(GL_COLOR_ATTACHMENT0);
 

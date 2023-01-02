@@ -3,6 +3,7 @@ package lemon;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import util.Log;
 
 public class Camera {
     private Matrix4f projectionMatrix, viewMatrix, inverseProjection, inverseView;
@@ -12,6 +13,7 @@ public class Camera {
     private float zoom = 1.0f;
 
     public Camera(Vector2f position) {
+        Log.lemon("Camera", "Camera()");
         this.position = position;
         this.projectionMatrix = new Matrix4f();
         this.viewMatrix = new Matrix4f();
@@ -28,6 +30,7 @@ public class Camera {
     }
 
     public Matrix4f getViewMatrix() {
+
         Vector3f cameraFront = new Vector3f(0.0f, 0.0f, -1.0f);
         Vector3f cameraUp = new Vector3f(0.0f, 1.0f, 0.0f);
         this.viewMatrix.identity();

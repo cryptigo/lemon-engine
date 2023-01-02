@@ -30,22 +30,28 @@ public class DebugDraw {
 
     public static void start() {
         Log.renderer("DebugDraw", "start()");
+
         // Generate the VAO
+        Log.renderer("DebugDraw", "Generating the Vertex Array Object (VAO)");
         vaoID = glGenVertexArrays();
         glBindVertexArray(vaoID);
 
         // Create the VBO and buffer the vertices
+        Log.renderer("DebugDraw", "Creating the Vertex Buffer Object (VBO)");
         vboID = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         glBufferData(GL_ARRAY_BUFFER, vertexArray.length * Float.BYTES, GL_DYNAMIC_DRAW);
 
         // Enable the vertex buffer attributes
+        Log.renderer("DebugDraw", "Enabling the vertex buffer attributes");
+
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 6 * Float.BYTES, 0);
         glEnableVertexAttribArray(0);
 
         glVertexAttribPointer(1, 3, GL_FLOAT, false, 6 * Float.BYTES, 3 * Float.BYTES);
         glEnableVertexAttribArray(1);
 
+        Log.renderer("DebugDraw", "Setting OpenGL line width");
         glLineWidth(2.0f);
     }
 

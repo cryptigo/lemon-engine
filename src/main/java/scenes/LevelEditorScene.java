@@ -21,7 +21,7 @@ public class LevelEditorScene extends Scene {
     Transform obj1, obj2;
 
     public LevelEditorScene() {
-        Log.scene("LevelEditorScene", "LevelEditorScene");
+        Log.scene("LevelEditorScene", "LevelEditorScene()");
     }
 
     @Override

@@ -40,6 +40,7 @@ public class GameObject {
     }
 
     public <T extends Component> void removeComponent(Class<T> componentClass) {
+        //Log.lemon("GameObject", "removeComponent()");
         for (int i=0; i < components.size(); i++) {
             Component c = components.get(i);
             if (componentClass.isAssignableFrom(c.getClass())) {
@@ -50,6 +51,8 @@ public class GameObject {
     }
 
     public void addComponent(Component c) {
+        //Log.lemon("GameObject", "addComponent()");
+
         c.generateId();
         this.components.add(c);
         c.gameObject = this;
@@ -75,6 +78,7 @@ public class GameObject {
     }
 
     public static void init(int maxId) {
+        Log.lemon("GameObject", "init()");
         ID_COUNTER = maxId;
     }
 
@@ -87,10 +91,12 @@ public class GameObject {
     }
 
     public void setNoSerialize() {
+        //Log.lemon("GameObject", "setNoSerialize()");
         this.doSerialization = false;
     }
 
     public boolean doSerialization() {
+        //Log.lemon("GameObject", "doSerialization()");
         return this.doSerialization;
     }
 }

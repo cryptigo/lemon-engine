@@ -20,10 +20,12 @@ public class Shader {
     private String filepath;
 
     public Shader(String filepath) {
-        Log.renderer("Shader", "Shader()");
+        Log.renderer("Shader", "Shader(String) -> " + filepath);
 
         this.filepath = filepath;
         try {
+            Log.renderer("Shader", "Parsing shader file");
+
             String source = new String(Files.readAllBytes(Paths.get(filepath)));
             String[] splitString = source.split("(#type)( )+([a-zA-Z]+)");
 
@@ -62,13 +64,13 @@ public class Shader {
     }
 
     public void compile() {
-        Log.renderer("Shader", "compile()");
         // ==============================
         //    Compile and link shaders
         // ==============================
         int vertexID, fragmentID;
 
         // Load and compile the vertex shader
+        Log.renderer("Shader", "Compiling vertex shader");
         vertexID = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(vertexID, vertexSource);
         glCompileShader(vertexID);
@@ -83,6 +85,7 @@ public class Shader {
         }
 
         // Load and compile the fragment shader
+        Log.renderer("Shader", "Compiling vertex shader");
         fragmentID = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(fragmentID, fragmentSource);
         glCompileShader(fragmentID);
@@ -97,6 +100,7 @@ public class Shader {
         }
 
         // Link the shaders together
+        Log.renderer("Shader", "Linking shaders into shader program");
         shaderProgramID = glCreateProgram();
         glAttachShader(shaderProgramID, vertexID);
         glAttachShader(shaderProgramID, fragmentID);
