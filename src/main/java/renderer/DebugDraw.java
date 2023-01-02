@@ -5,6 +5,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import util.AssetPool;
 import util.JMath;
+import util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +29,7 @@ public class DebugDraw {
     private static boolean started = false;
 
     public static void start() {
+        Log.renderer("DebugDraw", "start()");
         // Generate the VAO
         vaoID = glGenVertexArrays();
         glBindVertexArray(vaoID);
@@ -97,7 +99,7 @@ public class DebugDraw {
         glEnableVertexAttribArray(1);
 
         // Draw the batch
-        glDrawArrays(GL_LINES, 0, lines.size() * 6 * 2);
+        glDrawArrays(GL_LINES, 0, lines.size() * 2);
 
         // Disable location
         glDisableVertexAttribArray(0);
@@ -134,6 +136,7 @@ public class DebugDraw {
     }
 
     public static void addBox2D(Vector2f center, Vector2f dimensions, float rotation, Vector3f color, int lifetime) {
+
         Vector2f min = new Vector2f(center).sub(new Vector2f(dimensions).mul(0.5f));
         Vector2f max = new Vector2f(center).add(new Vector2f(dimensions).mul(0.5f));
 

@@ -2,9 +2,11 @@ package renderer;
 
 import components.SpriteRenderer;
 import lemon.Window;
+import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 import util.AssetPool;
+import util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +49,7 @@ public class RenderBatch implements Comparable<RenderBatch> {
     private int zIndex;
 
     public RenderBatch(int maxBatchSize, int zIndex) {
+        Log.renderer("RenderBatch", "RenderBatch()");
         this.zIndex = zIndex;
         this.sprites = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;
@@ -54,12 +57,15 @@ public class RenderBatch implements Comparable<RenderBatch> {
         // 4 vertices quads
         vertices = new float[maxBatchSize * 4 * VERTEX_SIZE];
 
+
         this.numSprites = 0;
         this.hasRoom = true;
         this.textures = new ArrayList<>();
     }
 
     public void start() {
+        Log.renderer("RenderBatch", "start()");
+
         // Generate and bind a Vertex Array Object
         vaoID = glGenVertexArrays();
         glBindVertexArray(vaoID);
@@ -172,6 +178,17 @@ public class RenderBatch implements Comparable<RenderBatch> {
             }
         }
 
+        boolean isRotated = sprite.gameObject.transform.rotation != 0.0f;
+        Matrix4f transformMatrix = new Matrix4f().identity();
+        if (isRotated) {
+            transformMatrix.translate(sprite.gameObject.transform.position.x,
+                    sprite.gameObject.transform.position.y, 0f);
+            transformMatrix.rotate((float)Math.toRadians(sprite.gameObject.transform.rotation),
+                    0, 0, 1);
+            transformMatrix.scale(sprite.gameObject.transform.scale.x,
+                    sprite.gameObject.transform.scale.y, 1);
+        }
+
         // Add vertices with the appropriate properties
         float xAdd = 1.0f;
         float yAdd = 1.0f;
@@ -184,9 +201,16 @@ public class RenderBatch implements Comparable<RenderBatch> {
                 yAdd = 1.0f;
             }
 
+            Vector4f currentPos = new Vector4f(sprite.gameObject.transform.position.x + (xAdd * sprite.gameObject.transform.scale.x),
+                    sprite.gameObject.transform.position.y + (yAdd * sprite.gameObject.transform.scale.y),
+                    0, 1);
+            if (isRotated) {
+                currentPos = new Vector4f(xAdd, yAdd, 0, 1).mul(transformMatrix);
+            }
+
             // Load position
-            vertices[offset] = sprite.gameObject.transform.position.x + (xAdd * sprite.gameObject.transform.scale.x);
-            vertices[offset + 1] = sprite.gameObject.transform.position.y + (yAdd * sprite.gameObject.transform.scale.y);
+            vertices[offset] = currentPos.x;
+            vertices[offset + 1] = currentPos.y;
 
             // Load color
             vertices[offset + 2] = color.x;
@@ -209,6 +233,8 @@ public class RenderBatch implements Comparable<RenderBatch> {
     }
 
     private int[] generateIndices() {
+        Log.debug("LevelEditorScene", "generateIndices()");
+
         // 6 indices per quad (3 per triangle)
         int[] elements = new int[6 * maxBatchSize];
         for (int i=0; i < maxBatchSize; i++) {

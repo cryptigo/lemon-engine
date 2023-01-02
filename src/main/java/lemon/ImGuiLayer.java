@@ -10,6 +10,9 @@ import imgui.gl3.ImGuiImplGl3;
 import imgui.type.ImBoolean;
 import renderer.PickingTexture;
 import scenes.Scene;
+import util.Log;
+
+import java.util.PropertyResourceBundle;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -27,6 +30,8 @@ public class ImGuiLayer {
     private PropertiesWindow propertiesWindow;
 
     public ImGuiLayer(long glfwWindow, PickingTexture pickingTexture) {
+        Log.lemon("ImGuiLayer", "ImGuiLayer()");
+
         this.glfwWindow = glfwWindow;
         this.gameViewWindow = new GameViewWindow();
         this.propertiesWindow = new PropertiesWindow(pickingTexture);
@@ -34,6 +39,8 @@ public class ImGuiLayer {
 
     // Initialize Dear ImGui.
     public void initImGui() {
+        Log.lemon("ImGuiLayer", "initImGui()");
+
         // IMPORTANT!!
         // This line is critical for Dear ImGui to work.
         ImGui.createContext();
@@ -136,6 +143,7 @@ public class ImGuiLayer {
         glfwSetScrollCallback(glfwWindow, (w, xOffset, yOffset) -> {
             io.setMouseWheelH(io.getMouseWheelH() + (float) xOffset);
             io.setMouseWheel(io.getMouseWheel() + (float) yOffset);
+            MouseListener.mouseScrollCallback(w, xOffset, yOffset);
         });
 
         io.setSetClipboardTextFn(new ImStrConsumer() {
@@ -201,6 +209,7 @@ public class ImGuiLayer {
     }
 
     private void startFrame(final float deltaTime) {
+
         // Get window properties and mouse position
         float[] winWidth = {Window.getWidth()};
         float[] winHeight = {Window.getHeight()};
@@ -229,6 +238,8 @@ public class ImGuiLayer {
 
     // If you want to clean a room after yourself - do it by yourself
     private void destroyImGui() {
+        Log.lemon("ImGuiLayer", "destroyImGui()");
+
         imGuiGl3.dispose();
         ImGui.destroyContext();
     }
@@ -249,5 +260,9 @@ public class ImGuiLayer {
 
         // Dockspace
         ImGui.dockSpace(ImGui.getID("Dockspace"));
+    }
+
+    public PropertiesWindow getPropertiesWindow() {
+        return this.propertiesWindow;
     }
 }

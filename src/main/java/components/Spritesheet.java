@@ -2,6 +2,7 @@ package components;
 
 import org.joml.Vector2f;
 import renderer.Texture;
+import util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ public class Spritesheet {
 
     // Creates a new Spritesheet object from an image texture.
     public Spritesheet(Texture texture, int spriteWidth, int spriteHeight, int numSprites, int spacing) {
+        Log.debug("Spritesheet", "Spritesheet()");
         this.sprites = new ArrayList<>();
 
         this.texture = texture;

@@ -1,6 +1,7 @@
 package lemon;
 
 import components.Component;
+import util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,13 +12,11 @@ public class GameObject {
 
     private String name;
     private List<Component> components;
-    public Transform transform;
-    private int zIndex;
+    public transient Transform transform;
+    private boolean doSerialization = true;
 
-
-    public GameObject(String name, Transform transform, int zIndex) {
+    public GameObject(String name) {
         this.name = name;
-        this.zIndex = zIndex;
         this.components = new ArrayList<>();
         this.transform = transform;
 
@@ -31,10 +30,11 @@ public class GameObject {
                     return componentClass.cast(c);
                 } catch (ClassCastException e) {
                     e.printStackTrace();
-                    assert false : "[GameObject] Error: Casting component.";
+                    assert false : "Error: Casting component.";
                 }
             }
         }
+
         return null;
     }
 
@@ -52,10 +52,6 @@ public class GameObject {
         c.generateId();
         this.components.add(c);
         c.gameObject = this;
-    }
-
-    public List<Component> getAllComponents() {
-        return this.components;
     }
 
     public void update(float dt) {
@@ -76,17 +72,23 @@ public class GameObject {
         }
     }
 
-    public int zIndex() {
-        return this.zIndex;
+    public static void init(int maxId) {
+        ID_COUNTER = maxId;
     }
 
     public int getUid() {
         return this.uid;
     }
 
-    public static void init(int maxID) {
-        ID_COUNTER = maxID;
+    public List<Component> getAllComponents() {
+        return this.components;
     }
 
+    public void setNoSerialize() {
+        this.doSerialization = false;
+    }
 
+    public boolean doSerialization() {
+        return this.doSerialization;
+    }
 }

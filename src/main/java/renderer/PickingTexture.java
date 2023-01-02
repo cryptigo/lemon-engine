@@ -1,5 +1,7 @@
 package renderer;
 
+import util.Log;
+
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT32;
 import static org.lwjgl.opengl.GL30.*;
@@ -11,6 +13,8 @@ public class PickingTexture {
     private int depthTexture;
 
     public PickingTexture(int width, int height) {
+        Log.renderer("PickingTexture", "PickingTexture()");
+
         if (!init(width, height)) {
             assert false : "Error initializing picking texture";
         }
@@ -24,8 +28,8 @@ public class PickingTexture {
         // Create the texture to render the data to, and attach it to our framebuffer
         pickingTextureId = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, pickingTextureId);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, width, height, 0,
@@ -58,6 +62,7 @@ public class PickingTexture {
     }
 
     public void enableWriting() {
+
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo);
     }
 

@@ -1,6 +1,7 @@
 package renderer;
 
 import org.lwjgl.BufferUtils;
+import util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -20,6 +21,7 @@ public class Texture {
     }
 
     public Texture(int width, int height) {
+        Log.renderer("Texture", "Texture()");
         this.filepath = "Generated";
 
         // Generate texture on GPU
@@ -34,6 +36,7 @@ public class Texture {
     }
 
     public void init(String filepath) {
+        Log.renderer("Texture", "init() -> " + filepath);
         this.filepath = filepath;
 
         // Generate texture on GPU
@@ -66,7 +69,7 @@ public class Texture {
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width.get(0), height.get(0),
                         0, GL_RGBA, GL_UNSIGNED_BYTE, image);
             } else {
-                assert false : "Error: (Texture) Unknown number of channesl '" + channels.get(0) + "'";
+                assert false : "Error: (Texture) Unknown number of channels: '" + channels.get(0) + "'";
             }
         } else {
             assert false : "Error: (Texture) Could not load image '" + filepath + "'";
@@ -76,10 +79,13 @@ public class Texture {
     }
 
     public void bind() {
+        //Log.renderer("Texture", "bind()");
+
         glBindTexture(GL_TEXTURE_2D, texID);
     }
 
     public void unbind() {
+        //Log.renderer("Texture", "unbind()");
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 

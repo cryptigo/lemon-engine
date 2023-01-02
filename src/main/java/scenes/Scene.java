@@ -8,7 +8,9 @@ import imgui.ImGui;
 import lemon.Camera;
 import lemon.GameObject;
 import lemon.GameObjectDeserializer;
+import lemon.Transform;
 import renderer.Renderer;
+import util.Log;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,18 +26,18 @@ public abstract class Scene {
     protected Camera camera;
     private boolean isRunning = false;
     protected List<GameObject> gameObjects = new ArrayList<>();
-
     protected boolean levelLoaded = false;
 
     public Scene() {
-
+        Log.scene("Scene", "Scene()");
     }
 
     public void init() {
-
+        Log.scene("Scene", "init()");
     }
 
     public void start() {
+        Log.scene("Scene", "start()");
         for (GameObject go : gameObjects) {
             go.start();
             this.renderer.add(go);
@@ -67,12 +69,19 @@ public abstract class Scene {
         return this.camera;
     }
 
-
     public void imgui() {
 
     }
 
+    public GameObject createGameObject(String name) {
+        GameObject go = new GameObject(name);
+        go.addComponent(new Transform());
+        go.transform = go.getComponent(Transform.class);
+        return go;
+    }
+
     public void saveExit() {
+        Log.scene("Scene", "saveExit()");
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(Component.class, new ComponentDeserializer())
@@ -81,7 +90,13 @@ public abstract class Scene {
 
         try {
             FileWriter writer = new FileWriter("assets/data/saves/level.txt");
-            writer.write(gson.toJson(this.gameObjects));
+            List<GameObject> objsToSerialize = new ArrayList<>();
+            for (GameObject obj : this.gameObjects) {
+                if (obj.doSerialization()) {
+                    objsToSerialize.add(obj);
+                }
+            }
+            writer.write(gson.toJson(objsToSerialize));
             writer.close();
         } catch(IOException e) {
             e.printStackTrace();
@@ -89,6 +104,7 @@ public abstract class Scene {
     }
 
     public void load() {
+        Log.scene("Scene", "load()");
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(Component.class, new ComponentDeserializer())

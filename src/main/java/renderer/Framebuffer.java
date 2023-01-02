@@ -1,5 +1,7 @@
 package renderer;
 
+import util.Log;
+
 import static org.lwjgl.opengl.GL30.*;
 
 public class Framebuffer {
@@ -7,6 +9,7 @@ public class Framebuffer {
     private Texture texture = null;
 
     public Framebuffer(int width, int height) {
+        Log.renderer("Framebuffer", "Framebuffer()");
         // Generate framebuffer
         fboID = glGenFramebuffers();
         glBindFramebuffer(GL_FRAMEBUFFER, fboID);
@@ -28,10 +31,14 @@ public class Framebuffer {
     }
 
     public void bind() {
+        //Log.renderer("Framebuffer", "bind()");
+
         glBindFramebuffer(GL_FRAMEBUFFER, fboID);
     }
 
     public void unbind() {
+        //Log.renderer("Framebuffer", "unbind()");
+
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 

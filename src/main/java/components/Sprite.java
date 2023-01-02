@@ -2,6 +2,7 @@ package components;
 
 import org.joml.Vector2f;
 import renderer.Texture;
+import util.Log;
 
 public class Sprite {
 

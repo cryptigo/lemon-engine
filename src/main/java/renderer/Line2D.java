@@ -10,6 +10,7 @@ public class Line2D {
     private int lifetime;
 
     public Line2D(Vector2f from, Vector2f to, Vector3f color, int lifetime) {
+
         this.from = from;
         this.to = to;
         this.color = color;

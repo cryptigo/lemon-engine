@@ -70,7 +70,6 @@ public class Window {
     }
 
     public void run() {
-
         init();
         loop();
 
@@ -89,7 +88,7 @@ public class Window {
 
         // Initialize GLFW
         if (!glfwInit()) {
-            throw new IllegalStateException("(Window) ERROR: Unable to initialize GLFW.");
+            throw new IllegalStateException("Unable to initialize GLFW.");
         }
 
         // Configure GLFW
@@ -101,7 +100,7 @@ public class Window {
         // Create the window
         glfwWindow = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
         if (glfwWindow == NULL) {
-            throw new IllegalStateException("(Window) ERROR: Failed to create the GLFW window.");
+            throw new IllegalStateException("Failed to create the GLFW window.");
         }
 
         glfwSetCursorPosCallback(glfwWindow, MouseListener::mousePosCallback);
@@ -184,6 +183,7 @@ public class Window {
 
             this.imguiLayer.update(dt, currentScene);
             glfwSwapBuffers(glfwWindow);
+            MouseListener.endFrame();
 
             endTime = (float)glfwGetTime();
             dt = endTime - beginTime;
@@ -215,5 +215,9 @@ public class Window {
 
     public static float getTargetAspectRatio() {
         return 16.0f / 9.0f;
+    }
+
+    public static ImGuiLayer getImguiLayer() {
+        return get().imguiLayer;
     }
 }
