@@ -31,6 +31,7 @@ public class Transform extends Component {
 
     @Override
     public void imgui() {
+        gameObject.name = LImGui.inputText("Name: ", gameObject.name);
         LImGui.drawVec2Control("Position", this.position);
         LImGui.drawVec2Control("Scale", this.scale, 32.0f);
         this.rotation = LImGui.dragFloat("Rotation", this.rotation);

@@ -4,10 +4,14 @@ import imgui.ImGui;
 import imgui.flag.ImGuiTreeNodeFlags;
 import lemon.GameObject;
 import lemon.Window;
+import util.Log;
 
 import java.util.List;
+import java.util.Objects;
 
 public class SceneHierarchyWindow {
+
+    private static String payloadDragDropType = "SceneHierarchy";
 
     public void imgui() {
         ImGui.begin("Scene Hierarchy");
@@ -20,14 +24,7 @@ public class SceneHierarchyWindow {
             }
 
             ImGui.pushID(index);
-            boolean treeNodeOpen = ImGui.treeNodeEx(
-                    obj.name,
-                    ImGuiTreeNodeFlags.DefaultOpen |
-                            ImGuiTreeNodeFlags.FramePadding |
-                            ImGuiTreeNodeFlags.OpenOnArrow |
-                            ImGuiTreeNodeFlags.SpanAvailWidth,
-                    obj.name
-            );
+            boolean treeNodeOpen = doTreeNode(obj, index);
             ImGui.popID();
 
             if (treeNodeOpen) {
@@ -36,5 +33,38 @@ public class SceneHierarchyWindow {
             index++;
         }
         ImGui.end();
+    }
+
+    private boolean doTreeNode(GameObject obj, int index) {
+        ImGui.pushID(index);
+        boolean treeNodeOpen = ImGui.treeNodeEx(
+                obj.name,
+                ImGuiTreeNodeFlags.DefaultOpen |
+                        ImGuiTreeNodeFlags.FramePadding |
+                        ImGuiTreeNodeFlags.OpenOnArrow |
+                        ImGuiTreeNodeFlags.SpanAvailWidth,
+                obj.name
+        );
+        ImGui.popID();
+
+        if (ImGui.beginDragDropSource()) {
+            ImGui.setDragDropPayloadObject(payloadDragDropType, obj);
+            ImGui.text(obj.name);
+            ImGui.endDragDropSource();
+        }
+
+        if (ImGui.beginDragDropTarget()) {
+            Object payloadObj = ImGui.acceptDragDropPayloadObject(payloadDragDropType);
+            if (payloadObj != null) {
+                if (payloadObj.getClass().isAssignableFrom(GameObject.class)) {
+                    GameObject playerGameObj = (GameObject) payloadObj;
+                    Log.editor("SceneHierarchyWindow", "Payload accepted '" + ((GameObject) payloadObj).name + "'");
+                }
+            }
+            ImGui.endDragDropTarget();
+        }
+
+
+        return treeNodeOpen;
     }
 }

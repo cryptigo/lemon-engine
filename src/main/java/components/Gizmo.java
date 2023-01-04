@@ -19,11 +19,11 @@ public class Gizmo extends Component {
     private SpriteRenderer yAxisSprite;
     protected GameObject activeGameObject = null;
 
-    private Vector2f xAxisOffset = new Vector2f(24f / 80f, -6f / 80f);
+    private Vector2f xAxisOffset = new Vector2f(21f / 80f, -6f / 80f);
     private Vector2f yAxisOffset = new Vector2f(-7f / 80f, 21f / 80f);
 
-    private float gizmoWidth = 16f / 80f;
-    private float gizmoHeight = 24f / 80f;
+    private float gizmoWidth = 21f / 80f;
+    private float gizmoHeight = 46f / 80f;
 
     protected boolean xAxisActive = false;
     protected boolean yAxisActive = false;
@@ -50,8 +50,8 @@ public class Gizmo extends Component {
 
     @Override
     public void start() {
-        this.xAxisObject.transform.rotation = 90;
-        this.yAxisObject.transform.rotation = 180;
+        this.xAxisObject.transform.rotation = -90;
+        this.yAxisObject.transform.rotation = 0;
         this.xAxisObject.transform.zIndex = 100;
         this.yAxisObject.transform.zIndex = 100;
         this.xAxisObject.setNoSerialize();
