@@ -184,9 +184,9 @@ public class Window implements Observer {
                 DebugDraw.draw();
                 Renderer.bindShader(defaultShader);
                 if (runtimePlaying) {
-                    currentScene.editorUpdate(dt);
-                } else {
                     currentScene.update(dt);
+                } else {
+                    currentScene.editorUpdate(dt);
                 }
                 currentScene.render();
             }
@@ -238,6 +238,7 @@ public class Window implements Observer {
                 Log.lemon("Window", "Starting play");
                 this.runtimePlaying = true;
                 currentScene.save();
+                Window.changeScene(new LevelEditorSceneInitializer());
                 break;
             case GameEngineStopPlay:
                 Log.lemon("Window", "Stopping play");
@@ -249,6 +250,7 @@ public class Window implements Observer {
                 break;
             case SaveLevel:
                 currentScene.save();
+                break;
         }
     }
 }
