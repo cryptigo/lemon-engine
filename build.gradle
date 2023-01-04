@@ -8,7 +8,7 @@ version '1.0-SNAPSHOT'
 project.ext.lwjglVersion = '3.2.3'
 project.ext.jomlVersion = "1.10.5"
 project.ext.lwjglNatives = "natives-linux"
-project.ext.imguiVersion = '1.77-0.17.1'
+project.ext.imguiVersion = '1.81.0'
 
 sourceCompatibility = 1.8
 
@@ -47,9 +47,7 @@ dependencies {
     implementation "com.google.code.gson:gson:2.10"
 
     // ImGui
-    implementation "io.imgui.java:binding:$imguiVersion"
-    implementation "io.imgui.java:lwjgl3:$imguiVersion"
-    runtimeOnly "io.imgui.java:natives-linux:$imguiVersion"
+    implementation "io.github.spair:imgui-java-app:$imguiVersion"
 
     // LuaJ
     implementation "org.luaj:luaj-jse:3.0.1"
@@ -59,6 +57,8 @@ dependencies {
 
     // Box2D
     implementation name: 'jbox2d-library'
+
+
 
 }
 
