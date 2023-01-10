@@ -19,11 +19,11 @@ public class Gizmo extends Component {
     private SpriteRenderer yAxisSprite;
     protected GameObject activeGameObject = null;
 
-    private Vector2f xAxisOffset = new Vector2f(21f / 80f, -6f / 80f);
+    private Vector2f xAxisOffset = new Vector2f(24f / 80f, -6f / 80f);
     private Vector2f yAxisOffset = new Vector2f(-7f / 80f, 21f / 80f);
 
-    private float gizmoWidth = 21f / 80f;
-    private float gizmoHeight = 46f / 80f;
+    private float gizmoWidth = 16f / 80f;
+    private float gizmoHeight = 48f / 80f;
 
     protected boolean xAxisActive = false;
     protected boolean yAxisActive = false;
@@ -44,18 +44,25 @@ public class Gizmo extends Component {
 
         Window.getScene().addGameObjectToScene(this.xAxisObject);
         Window.getScene().addGameObjectToScene(this.yAxisObject);
-
-
     }
 
     @Override
     public void start() {
-        this.xAxisObject.transform.rotation = -90;
-        this.yAxisObject.transform.rotation = 0;
+        this.xAxisObject.transform.rotation = 90;
+        this.yAxisObject.transform.rotation = 180;
         this.xAxisObject.transform.zIndex = 100;
         this.yAxisObject.transform.zIndex = 100;
         this.xAxisObject.setNoSerialize();
         this.yAxisObject.setNoSerialize();
+    }
+
+    @Override
+    public void update(float dt) {
+        if (using) {
+            this.setInactive();
+        }
+        this.xAxisObject.getComponent(SpriteRenderer.class).setColor(new Vector4f(0, 0, 0, 0));
+        this.yAxisObject.getComponent(SpriteRenderer.class).setColor(new Vector4f(0, 0, 0, 0));
     }
 
     @Override
@@ -65,18 +72,21 @@ public class Gizmo extends Component {
         this.activeGameObject = this.propertiesWindow.getActiveGameObject();
         if (this.activeGameObject != null) {
             this.setActive();
-            if (KeyListener.isKeyPressed(GLFW_KEY_LEFT_CONTROL) && KeyListener.keyBeginPress(GLFW_KEY_D)) {
+
+            // TODO: move this into it's own keyEditorBinding component class
+            if (KeyListener.isKeyPressed(GLFW_KEY_LEFT_CONTROL) &&
+                    KeyListener.keyBeginPress(GLFW_KEY_D)) {
                 GameObject newObj = this.activeGameObject.copy();
                 Window.getScene().addGameObjectToScene(newObj);
                 newObj.transform.position.add(0.1f, 0.1f);
                 this.propertiesWindow.setActiveGameObject(newObj);
                 return;
+            } else if (KeyListener.keyBeginPress(GLFW_KEY_DELETE)) {
+                activeGameObject.destroy();
+                this.setInactive();
+                this.propertiesWindow.setActiveGameObject(null);
+                return;
             }
-        } else if (KeyListener.keyBeginPress(GLFW_KEY_DELETE)) {
-            activeGameObject.destroy();
-            this.setInactive();
-            this.propertiesWindow.setActiveGameObject(null);
-            return;
         } else {
             this.setInactive();
             return;
@@ -116,7 +126,7 @@ public class Gizmo extends Component {
     }
 
     private boolean checkXHoverState() {
-        Vector2f mousePos = MouseListener.getWorld();
+        Vector2f mousePos = new Vector2f(MouseListener.getWorldX(), MouseListener.getWorldY());
         if (mousePos.x <= xAxisObject.transform.position.x + (gizmoHeight / 2.0f) &&
                 mousePos.x >= xAxisObject.transform.position.x - (gizmoWidth / 2.0f) &&
                 mousePos.y >= xAxisObject.transform.position.y - (gizmoHeight / 2.0f) &&
@@ -130,7 +140,7 @@ public class Gizmo extends Component {
     }
 
     private boolean checkYHoverState() {
-        Vector2f mousePos = MouseListener.getWorld();
+        Vector2f mousePos = new Vector2f(MouseListener.getWorldX(), MouseListener.getWorldY());
         if (mousePos.x <= yAxisObject.transform.position.x + (gizmoWidth / 2.0f) &&
                 mousePos.x >= yAxisObject.transform.position.x - (gizmoWidth / 2.0f) &&
                 mousePos.y <= yAxisObject.transform.position.y + (gizmoHeight / 2.0f) &&

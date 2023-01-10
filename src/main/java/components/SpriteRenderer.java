@@ -6,6 +6,7 @@ import lemon.Transform;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 import renderer.Texture;
+import util.AssetPool;
 import util.Log;
 
 public class SpriteRenderer extends Component {
@@ -18,6 +19,9 @@ public class SpriteRenderer extends Component {
 
     @Override
     public void start() {
+        if (this.sprite.getTexture() != null) {
+            this.sprite.setTexture(AssetPool.getTexture(this.sprite.getTexture().getFilepath()));
+        }
         this.lastTransform = gameObject.transform.copy();
     }
 
@@ -39,7 +43,7 @@ public class SpriteRenderer extends Component {
 
     @Override
     public void imgui() {
-        if (LImGui.colorPicker4("Color Picker", this.color)) {
+        if (LImGui.colorPicker4("Color Pickier", this.color)) {
             this.isDirty = true;
         }
     }

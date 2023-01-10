@@ -20,7 +20,6 @@ public class PropertiesWindow {
     private float debounce = 0.2f;
 
     public PropertiesWindow(PickingTexture pickingTexture) {
-        Log.editor("PropertiesWindow", "PropertiesWindow()");
         this.pickingTexture = pickingTexture;
     }
 
@@ -53,13 +52,15 @@ public class PropertiesWindow {
                 }
 
                 if (ImGui.menuItem("Add Box Collider")) {
-                    if (activeGameObject.getComponent(Box2DCollider.class) == null) {
+                    if (activeGameObject.getComponent(Box2DCollider.class) == null &&
+                            activeGameObject.getComponent(CircleCollider.class) == null) {
                         activeGameObject.addComponent(new Box2DCollider());
                     }
                 }
 
                 if (ImGui.menuItem("Add Circle Collider")) {
-                    if (activeGameObject.getComponent(CircleCollider.class) == null) {
+                    if (activeGameObject.getComponent(CircleCollider.class) == null &&
+                            activeGameObject.getComponent(Box2DCollider.class) == null) {
                         activeGameObject.addComponent(new CircleCollider());
                     }
                 }
